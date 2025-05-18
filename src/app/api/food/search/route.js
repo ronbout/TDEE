@@ -20,6 +20,13 @@ export async function GET(request) {
 	 *
 	 */
 
+	/**
+	 *
+	 *
+	 * change owner id to clerkId in all sql and remember it is a string
+	 *
+	 */
+
 	const keywordSql = keyword
 		? " AND (f.name LIKE ? OR f.description LIKE ?) "
 		: "";

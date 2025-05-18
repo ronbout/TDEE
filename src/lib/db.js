@@ -121,3 +121,12 @@ export async function getFood(id) {
 
 	return results;
 }
+
+export async function addUser({ id, firstName, lastName, username, email }) {
+	const query = `INSERT INTO member (first_name, last_name, user_name, email, clerkId)
+		VALUES ("${firstName}", "${lastName}", "${username}",  "${email}", "${id}");
+	`;
+	const results = await dbQuery(query);
+
+	return results;
+}
