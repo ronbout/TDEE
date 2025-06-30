@@ -122,6 +122,30 @@ export async function getFood(id) {
 	return results;
 }
 
+export async function getMember(email) {
+	const query = `
+		SELECT member_id as memberId, first_name as firstName, last_name as lastName,
+					 user_name as userName, email 
+			FROM member 
+			WHERE email = ?`;
+	// return query;
+
+	const sqlParms = [email];
+
+	let memberResults = await dbExecute(query, sqlParms);
+
+	// return memberResults;
+
+	if (memberResults.length) {
+		memberResults[0].firstName = decodeHtmlEntities(memberResults[0].firstName);
+		memberResults[0].lastName = decodeHtmlEntities(memberResults[0].lastName);
+		memberResults[0].userName = decodeHtmlEntities(memberResults[0].userName);
+		memberResults[0].totalCalsToday = 1400;
+	}
+
+	return memberResults;
+}
+
 export async function addUser({ id, firstName, lastName, username, email }) {
 	const query = `INSERT INTO member (first_name, last_name, user_name, email, clerkId)
 		VALUES ("${firstName}", "${lastName}", "${username}",  "${email}", "${id}");

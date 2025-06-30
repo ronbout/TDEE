@@ -1,4 +1,4 @@
-import { dbQuery, decodeHtmlEntities, getNutrients, getFood } from "@/lib/db";
+import { getNutrients, getFood } from "@/lib/db";
 
 export async function GET(_request, { params }) {
 	const { id } = await params;

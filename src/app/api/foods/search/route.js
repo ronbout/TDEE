@@ -3,13 +3,23 @@ import { dbExecute, decodeHtmlEntities } from "@/lib/db";
 export async function GET(request) {
 	// const { id } = await params;
 	const searchParams = request.nextUrl.searchParams;
-	const owner = parseInt(searchParams.get("owner"));
-	const searchOpt = searchParams.get("searchfoodoption");
-	const keyword = searchParams.get("keyword")
-		? `%${searchParams.get("keyword")}%`
+	const lowerParams = new URLSearchParams(
+		Array.from(searchParams, ([key, value]) => [key.toLowerCase(), value])
+	);
+
+	// return Response.json(
+	// 	{ test: lowerParams.get("searchfoodoption") },
+	// 	{
+	// 		status: 200,
+	// 	}
+	// );
+	const owner = parseInt(lowerParams.get("owner"));
+	const searchOpt = lowerParams.get("searchfoodoption");
+	const keyword = lowerParams.get("keyword")
+		? `%${lowerParams.get("keyword")}%`
 		: "";
-	const limit = searchParams.get("limit")
-		? parseInt(searchParams.get("limit"))
+	const limit = lowerParams.get("limit")
+		? parseInt(lowerParams.get("limit"))
 		: 10;
 
 	/**
@@ -17,13 +27,6 @@ export async function GET(request) {
 	 *
 	 *   need to add pagination
 	 *
-	 *
-	 */
-
-	/**
-	 *
-	 *
-	 * change owner id to clerkId in all sql and remember it is a string
 	 *
 	 */
 
@@ -103,7 +106,9 @@ export async function GET(request) {
 			ORDER BY foodName LIMIT ${limit}`;
 			break;
 		case "favFoods":
-			sqlParms = keyword ? [owner, keyword, keyword] : [owner];
+			sqlParms = keyword
+				? [owner, keyword, keyword, owner, keyword, keyword]
+				: [owner, owner];
 			query = `${selectFavBasic} UNION ${selectFavRecipe}	ORDER BY foodName LIMIT ${limit}`;
 			break;
 		case "allFoods":
@@ -113,6 +118,13 @@ export async function GET(request) {
 	}
 
 	query = query.replace(/[\n\t]/g, " ").replace(/\s+/g, " ");
+
+	// return Response.json(
+	// 	{ sql: query },
+	// 	{
+	// 		status: 200,
+	// 	}
+	// );
 
 	let foodResults = await dbExecute(query, sqlParms);
 
@@ -133,6 +145,11 @@ export async function GET(request) {
 		},
 		{
 			status: 200,
+			headers: {
+				"Access-Control-Allow-Origin": "*",
+				"Access-Control-Allow-Methods": "GET",
+				"Access-Control-Allow-Headers": "Content-Type",
+			},
 		}
 	);
 

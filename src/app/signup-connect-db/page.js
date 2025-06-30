@@ -1,5 +1,6 @@
 import { addUser } from "@/lib/db";
 import { auth, clerkClient } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 const SignupConnectDb = async () => {
@@ -29,6 +30,7 @@ const SignupConnectDb = async () => {
 	const result = await addUser({ id, firstName, lastName, username, email });
 	const externalId = result.insertId.toString();
 	await client.users.updateUser(userId, { externalId });
+	revalidatePath("/");
 	redirect("/welcome");
 
 	return (
