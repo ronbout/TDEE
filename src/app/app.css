@@ -1,0 +1,10 @@
+.hero {
+	position: relative;
+	background-image: url("/assets/img/calorie-hero.jpg");
+	background-position: center center;
+	height: 80vh;
+	background-size: cover;
+	padding-top: 15vh;
+	padding-bottom: 20vh;
+	color: black;
+}

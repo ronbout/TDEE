@@ -1,12 +1,16 @@
-export default function Home() {
+import "./app.css";
+import LandingPage from "@/components/landingPage";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+
+export default async function Home() {
+	const { userId } = await auth();
+	if (userId) {
+		redirect("/members");
+	}
 	return (
 		<main>
-			<h1>Total Daily Energy Expenditure Tracker</h1>
-			<p>
-				Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste ex in
-				facilis. Obcaecati asperiores nihil cupiditate maiores maxime!
-				Necessitatibus, impedit!
-			</p>
+			<LandingPage />
 		</main>
 	);
 }
