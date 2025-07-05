@@ -7,19 +7,21 @@ import {
 	SignedOut,
 	SignInButton,
 	SignUpButton,
+	useAuth,
 	UserButton,
 } from "@clerk/nextjs";
 
-const links = [
-	{ href: "/", label: "Home" },
-	{ href: "/foods", label: "Foods" },
-	{ href: "/foods/lookup", label: "Food Lookup" },
-	{ href: "/members", label: "Members" },
-	{ href: "/welcome", label: "Welcome" },
-];
-
 const Navbar = () => {
 	const pathname = usePathname();
+	const { userId } = useAuth();
+
+	const links = [
+		{ href: "/", label: "Home" },
+		{ href: "/foods", label: "Foods" },
+		{ href: "/foods/lookup", label: "Food Lookup" },
+		{ href: `/dashboard/${userId}`, label: "Dashboard" },
+		{ href: "/welcome", label: "Welcome" },
+	];
 	const isActive = (path) => {
 		if (pathname === path) return true;
 		// if ("/products" === path) {
@@ -30,7 +32,7 @@ const Navbar = () => {
 	const activeClassName = "text-blue-600 font-bold cursor-default";
 	const inactiveClassName = "text-blue-400 hover:text-blue-600";
 	return (
-		<nav className="flex items-center justify-end">
+		<nav className="p-4 flex items-center justify-end">
 			{links.map((menuLink) => {
 				return (
 					<Link
